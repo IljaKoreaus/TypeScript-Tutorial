@@ -1,3 +1,28 @@
+type Address = {
+    street: string
+    city: string
+    country: string
+}
+
+type Person = {
+    name: string
+    age: number
+    isStudent: boolean
+    // Optional Property
+    address?: Address
+}
+
+type Order = {
+    pizza: Pizza,
+    status: string,
+    id: number
+}
+
+type Pizza = {
+    name: string,
+    price: number
+}
+
 const menu = [
     {name: "Margherita", price: 8},
     {name: "Pepperoni", price: 10},
@@ -6,15 +31,18 @@ const menu = [
 ];
 
 let cashInRegister = 100;
-let orderQueue = [];
+let orderQueue: Order[] = [];
 let runningNum = 1;
 
 // Add utility function "addNewPizza"
-function addNewPizza(newPizza) {
+// Adds pizza to the menu
+// If the pizza already exists
+// Updates the price of the pizza
+function addNewPizza(newPizza: Pizza) {
 
     let found = false;
 
-    for (pizza of menu) {
+    for (let pizza of menu) {
 
         if (pizza.name === newPizza.name) {
 
@@ -35,18 +63,18 @@ function addNewPizza(newPizza) {
 // 2. adds income to cashInRegister,
 // 3. Pushes a new "order object" to the orderQueue
 // 4. Returns the new order object
-function placeOrder(orderName) {
+function placeOrder(orderName: string) {
 
     let found = false;
     let order;
 
-    for (pizza of menu) {
+    for (let pizza of menu) {
 
         if (pizza.name === orderName) {
 
             cashInRegister += pizza.price;
             found = true;
-            order = {pizza: orderName, status: "ordered", id: runningNum};
+            order = {pizza: pizza, status: "ordered", id: runningNum};
             runningNum++;
             orderQueue.push(order);
             break;
@@ -57,15 +85,25 @@ function placeOrder(orderName) {
         return `Pizza named ${orderName} not found!`;
     }
 
-    console.log(`Order: ${order.pizza}`);
+    if (order !== undefined) {
+
+        console.log(`Order: ${order.pizza}`);
+
+    } else {
+
+        console.log("Undefined order");
+
+    }
+
     return order;
 }
 
-function completeOrder(orderId) {
+// Completes an order
+function completeOrder(orderId: number) {
 
     let found = false;
 
-    for (order of orderQueue) {
+    for (let order of orderQueue) {
 
         if (order.id === orderId) {
 
